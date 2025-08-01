@@ -36,7 +36,12 @@ def show(pict : np.ndarray, pict_name : str = 'pict',) -> None :
     :return: (no return value)
     """
     cv.imshow(pict_name, pict)
-    cv.waitKey(0)
+    while True:
+        key = cv.waitKey(100)
+        if cv.getWindowProperty(pict_name, cv.WND_PROP_VISIBLE) < 1:
+            break
+        if key != -1:
+            break
     cv.destroyAllWindows()
 
 def show_histgram(pict : np.ndarray) -> None:
@@ -72,7 +77,6 @@ def equalized_color_pict(pict) :
     equalized_image = cv.merge([b_eq, g_eq, r_eq])
 
     return equalized_image
-
 
 
 
