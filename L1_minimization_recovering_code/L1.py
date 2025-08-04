@@ -81,7 +81,7 @@ if __name__ == "__main__" :
     # Import the l1-minimization code above
     # Then run the following usage example
 
-    N = 12  # Input dimension
+    N = 9  # Input dimension
     A = {0, 1}  # Allowed Hamming weights
     delta = 0.5  # Fraction of data to mask
     seed = 42
