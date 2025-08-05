@@ -79,6 +79,37 @@ def equalized_color_pict(pict) :
     return equalized_image
 
 
+def unpickle(file_path : str):
+    """
+    This function is designed for getting data from CIFAR-100
+
+    It gets the file path of CIFAR-100 and return image data
+    in the dataset
+    """
+    import pickle
+    with open(file_path, 'rb') as fo:
+        dict = pickle.load(fo, encoding='bytes')
+    return dict[b'data']
+
+def get_test_image(file_path : str) :
+    """
+    This function is designed for converting image data in the CIFAR-100
+    to Numpy arrays
+
+    It gets file path of CIFAR-100 and then return the images array
+    """
+    image_data = unpickle(file_path)
+    test_images = []
+
+    for image_array in image_data :
+        test_image = image_array.reshape(3, 32, 32).transpose(1, 2, 0)
+        test_images.append(test_image)
+
+    return test_images
+
+
+
+
 
 
 
