@@ -45,7 +45,7 @@ def display_grayscale_image(image_array):
     plt.axis('off')  # Hide axes for a cleaner image display
     plt.show()
 
-
+# @profile # for estimating the time complexity
 # L1 optimizer for 2D arrays
 def L1optimizer_2D(input_array, M):
     """
@@ -120,7 +120,7 @@ def L1optimizer_2D(input_array, M):
     # Return g(x, y) and accuracy measurement
     return g_result, accuracy
 
-
+# @profile # for estimating the time complexity
 # L1 optimizer followed by Fourier pruning for 2D arrays
 def L1prunedSTDoptimizer_2D(input_array, M, c):
     """
