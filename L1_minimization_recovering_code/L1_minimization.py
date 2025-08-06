@@ -1,4 +1,4 @@
-from util import *
+from .util import *
 import cvxpy as cp
 
 def build_Fourier_base_matrix(length : int) -> np.ndarray :
@@ -145,12 +145,3 @@ def do_image_recovery(image_with_missing_values, missing_coordinates, threshold)
 
 
     return H, accuracy_H
-
-
-
-
-
-
-
-
-
