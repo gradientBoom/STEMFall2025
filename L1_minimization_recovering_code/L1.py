@@ -1,7 +1,3 @@
-"""
-Copy code from Professor Alex's code.
-For comparison
-"""
 import numpy as np
 import cvxpy as cp
 from PIL import Image
@@ -294,6 +290,3 @@ if __name__ == "__main__" :
         print(100 * (1 - accuracy_H))
 
         print( 20 * "*")
-
-
-

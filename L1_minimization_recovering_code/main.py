@@ -1,9 +1,6 @@
-"""
-Where our works begin
-"""
-from L1_minimization import *
-from util import *
-from L1 import *
+from .L1_minimization import *
+from .util import *
+from .L1 import *
 import time
 
 def get_random_coordinates(width, height, percentage):
@@ -81,7 +78,7 @@ def get_report_name(t_file_names : bytes) :
 
 if __name__ == "__main__"  :
 
-    test_images, file_names = get_test_image("../cifar-10-batches-py/test_batch")
+    test_images, file_names = get_test_image("cifar-10-batches-py/test_batch")
 
     for index in range(10) :
         t_image = test_images[index]
@@ -151,15 +148,3 @@ if __name__ == "__main__"  :
 #     #
 #     # generate_report(original_image, destroy_image, recovered_image_a,
 #                     "smallTriangle_report.png", save_path="../reports_alex")
-
-
-
-
-
-
-
-
-
-
-
-
