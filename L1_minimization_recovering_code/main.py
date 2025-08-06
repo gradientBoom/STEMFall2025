@@ -58,71 +58,99 @@ def random_destroy_to_image(image_array : np.ndarray, missing_value : int = 125,
 
     return mask_image, missing_coordinates
 
+def get_report_name(t_file_names : bytes) :
+    """
+    This function is designed for generating report name from
+    the CIFAR-10 dataset
+
+    It gets the filename from CIFAR-10 dataset, which is a bytes
+    string, converting the bytes into str and then return the final
+    names.
+    """
+    file_name = t_file_names.decode('utf-8')
+
+    name_len = len(file_name)
+
+    report_name = file_name[:name_len - 4] + "_report" + file_name[-4:]
+
+    return report_name
 
 
 
+# Multiple image test
+
+if __name__ == "__main__"  :
+
+    test_images, file_names = get_test_image("../cifar-10-batches-py/test_batch")
+
+    for index in range(10) :
+        t_image = test_images[index]
+        t_file_name = get_report_name(file_names[index])
+        # read grayscale image
+        original_image = cv.cvtColor(t_image, cv.COLOR_RGB2GRAY)
 
 
-# if __name__ == "__main__"  :
+        # get image with missing values
+        destroy_image, missing_coords = random_destroy_to_image(original_image, missing_value=0, percentage=0.3)
+        missing_set = set(map(tuple, missing_coords))
+
+        # Our way to achieve L1 minimization, basically the same
+        # but different in doing Fourier transform
+
+        start = time.time()
+        recovered_image, accuracy = do_image_recovery(destroy_image, missing_set, .2)
+        end = time.time()
+        print(f"Our total time used: {end - start} seconds.")
+
+        # Use the L1prunedSTDoptimizer_2D function
+        start_a = time.time()
+        recovered_image_a, accuracy_H_a = L1prunedSTDoptimizer_2D(destroy_image, missing_set, .2)
+        end_a = time.time()
+        print(f"Alex's total time used: {end_a - start_a} seconds.")
+
+        generate_report(original_image, destroy_image, recovered_image_a,
+                        t_file_name,
+                        save_path="../reports_alex")
+
+        generate_report(original_image, destroy_image, recovered_image,
+                        t_file_name,
+                        save_path="../reports")
+
+
+
+# # Single image test
+# if __name__ == "__main__" :
+#     # test_images = get_test_image("../cifar-10-batches-py/test_batch")
 #
-#     test_images = get_test_image("../cifar-100-python/test")
+#     # image = cv.cvtColor(test_images[0], cv.COLOR_RGB2GRAY)
 #
-#     for t_image in test_images :
-#         # read grayscale image
-#         image = cv.cvtColor(t_image, cv.COLOR_RGB2GRAY)
-#         show(image, "Original")
+#     # show(image)
 #
-#         # get image with missing values
-#         destroy_image, missing_coords = random_destroy_to_image(image, missing_value=0, percentage=0.1)
+#     # read grayscale image
+#     original_image = cv.imread("../test_images/smallTriangle.png", cv.IMREAD_GRAYSCALE)
+#     #
+#     destroy_image, missing_coords = random_destroy_to_image(original_image, missing_value=125, percentage=0.3)
+#     missing_set = set(map(tuple, missing_coords))
 #
-#         J = set(map(tuple, missing_coords))
+#     # Our way to achieve L1 minimization, basically the same
+#     # but different in doing Fourier transform
+#     start = time.time()
+#     recovered_image, accuracy = do_image_recovery(destroy_image, missing_set, .2)
+#     end = time.time()
+#     print(f"Our total time used: {end - start} seconds.")
+#     print(f"\n H :{recovered_image}; Accuracy: {accuracy}")
 #
-#         # Our way to achieve L1 minimization, basically the same
-#         # but different in doing Fourier transform
+#     generate_report(original_image, destroy_image, recovered_image,
+#                     "smallTriangle_report.png")
 #
-#         start = time.time()
-#         H, accuracy = do_image_recovery(destroy_image, J, .2)
-#         end = time.time()
-#         print(f"Our total time used: {end - start} seconds.")
-#
-#         # Use the L1prunedSTDoptimizer_2D function
-#
-#         start_a = time.time()
-#         H_a, accuracy_H_a = L1prunedSTDoptimizer_2D(destroy_image, J, .2)
-#         end_a = time.time()
-#         print(f"Alex's total time used: {end_a - start_a} seconds.")
-#
-#         show(H, "Recovered")
-#         print("\n")
-
-if __name__ == "__main__" :
-
-
-
-    # read grayscale image
-    image = cv.imread("../test_images/smallTriangle.png", cv.IMREAD_GRAYSCALE)
-
-    destroy_image, missing_coords = random_destroy_to_image(image, missing_value=125, percentage=0.5)
-    J = set(map(tuple, missing_coords))
-
-    # Our way to achieve L1 minimization, basically the same
-    # but different in doing Fourier transform
-    start = time.time()
-    H, accuracy = do_image_recovery(destroy_image, J, .2)
-    end = time.time()
-    print(f"Our total time used: {end - start} seconds.")
-    print(f"\n H :{H}; Accuracy: {accuracy}")
-
-    show(H,"Our Recovery")
-
-    # Use the L1prunedSTDoptimizer_2D function
-    start_a = time.time()
-    H_a, accuracy_H_a = L1prunedSTDoptimizer_2D(destroy_image, J, .2)
-    end_a = time.time()
-    print(f"Alex's total time used: {end_a - start_a} seconds.")
-    print(f"\n H :{H_a}; Accuracy: {accuracy_H_a}")
-
-    show(H_a,"Alex Recovery")
+#     # # Use the L1prunedSTDoptimizer_2D function
+#     # start_a = time.time()
+#     # recovered_image_a, accuracy_H_a = L1prunedSTDoptimizer_2D(destroy_image, J, .2)
+#     # end_a = time.time()
+#     # print(f"Alex's total time used: {end_a - start_a} seconds.")
+#     #
+#     # generate_report(original_image, destroy_image, recovered_image_a,
+#                     "smallTriangle_report.png", save_path="../reports_alex")
 
 
 
