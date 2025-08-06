@@ -1,5 +1,3 @@
-import numpy as np
-
 from util import *
 import cvxpy as cp
 
@@ -68,6 +66,7 @@ def do_inverse_Fourier_transform(input_array) :
 
     return np.real(g_fft_hat).round().astype(np.uint8)
 
+# @profile # for estimating the time complexity
 def solve_l1_minimization(image_array : np.ndarray, missing_coords) :
     rows, cols = image_array.shape
 
@@ -113,7 +112,14 @@ def solve_l1_minimization(image_array : np.ndarray, missing_coords) :
     # Return g(x, y) and accuracy measurement
     return g_result, accuracy
 
+# @profile # for estimating the time complexity
 def do_image_recovery(image_with_missing_values, missing_coordinates, threshold) :
+    """
+    This function is designed for doing image recovery by optimizing a function
+    using L1 minimization
+
+    It receives the image with missing values and a missing set
+    """
     g, accuracy = solve_l1_minimization(image_with_missing_values, missing_coordinates)
 
     rows, cols = g.shape
