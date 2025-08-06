@@ -91,7 +91,7 @@ if __name__ == "__main__":
         total_error += error_rate
 
         report_name = get_report_name(file_names[idx])  # e.g. "some_img.png" -> "some_img_report.png"
-        report_name = report_name.replace(".png", "_srcnn.png")  # 区分其他方法
+        report_name = report_name.replace(".png", "_srcnn.png")
         os.makedirs("reports",
                     exist_ok=True)
         generate_report(img_gt * 255, img_masked * 255, img_recovered * 255,
@@ -102,3 +102,4 @@ if __name__ == "__main__":
     print(f"[SRCNN EVALUATION] Average SSIM: {total_ssim / 10:.4f}")
     print(f"[SRCNN EVALUATION] Average Error rate: {total_error / 10:.4f}")
     print(f"This script evaluates SRCNN recovery")
+
