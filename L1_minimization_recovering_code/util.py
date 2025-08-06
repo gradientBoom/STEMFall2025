@@ -7,7 +7,39 @@ import numpy as np
 import matplotlib.pyplot as plt
 from skimage.metrics import peak_signal_noise_ratio as psnr
 from skimage.metrics import structural_similarity as ssim
-from L1_minimization import do_Fourier_transform
+
+def build_Fourier_base_matrix(length : int) -> np.ndarray :
+    """
+    This function is designed for building Fourier transform base
+    matrix according to Professor Alex's code
+
+    It gets the length of a 1D-array and return its Fourier transformation
+    base matrix
+    """
+    omega_input = np.exp(-2j * np.pi / length)
+
+    # F_input = np.array([[omega_input ** (x * m) for m in range(length)]
+    #                     for x in range(length)]) / np.sqrt(length)
+    F_input = np.array([[omega_input ** (x * m) for m in range(length)]
+                        for x in range(length)])
+
+    return F_input
+
+def do_Fourier_transform(input_array):
+    """
+    This function is designed for applying Fourier transformation to input array
+    It get a 2D Numpy array, which should be the image array then turn it into
+    a Fourier 2D array, still Numpy
+    """
+    rows, cols = input_array.shape
+
+    F_row = build_Fourier_base_matrix(rows)
+    F_col = build_Fourier_base_matrix(cols)
+
+    # Compute the 2D Fourier transform of g
+    g_fft = F_row @ input_array @ F_col.T
+
+    return g_fft
 
 def read_part_image_upper(percentage : int, pict) -> np.ndarray:
     """
